@@ -499,6 +499,7 @@ function RemoveClient(socket)
             if (Clients[i].roomType === "Bridge")
             {
                 SetBridgeInUse(bridgeID, false);
+                io.to("BridgeRoom-" + bridgeID).emit("bridgerooms_disconnected");
             }
             
             break;

@@ -1305,6 +1305,11 @@ function BridgeRooms_Connect()
         console.log("Client disconnected.", socketID);
         RemoveClient(socketID);
     });
+
+    socket.on('bridgerooms_disconnected', function() {
+        console.log("Bridge disconnected suddenly.");
+        BridgeRooms_Disconnect();
+    });
 }
 
 function AddClient(clientObj)
