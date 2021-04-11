@@ -1297,12 +1297,12 @@ function BridgeRooms_Connect()
     });
     
     socket.on('client_connected', function(clientObj) {
-        console.log("Client connected.");
+        console.log("Client connected.", clientObj);
         AddClient(clientObj);
     });
     
     socket.on('client_disconnected', function(socketID) {
-        console.log("Client disconnected.");
+        console.log("Client disconnected.", socketID);
         RemoveClient(socketID);
     });
 }
@@ -1601,7 +1601,7 @@ function PresentationItems_ChangeZoom()
     </div>
     <div id="divAnnouncements">
         Redirect to:<br />
-        <input type="text" id="txtAnnouncements_URL" value="http://www.fellowshipgreenville.org/newtofg" />
+        <input type="text" id="txtAnnouncements_URL" value="https://www.mebanebible.org" />
         <button id="btnAnnouncements_RedirectTo">Redirect to URL</button>
         <br /><br />
         Send text/announcement:<br />
