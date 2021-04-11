@@ -30,6 +30,12 @@
             position: relative;
         }
 
+        .break
+        {
+            display: block;
+            margin-bottom: 0.3em;
+        }
+
         #current_slide
         {
             display: block;
@@ -190,17 +196,19 @@
                     }
                     else
                     {
+                        text = text.replaceAll("\n","<span class=\"break\"></span>")
+                            .replaceAll("\r","<span class=\"break\"></span>");
                         if (announcement.innerHTML === "")
                         {
                             announcement.style.opacity = "0";
                             setTimeout(function() {
-                                announcement.innerHTML = text.replaceAll("\n","<br>").replaceAll("\r","<br>");
+                                announcement.innerHTML = text;
                                 announcement.style.opacity = "1";
                             }, 500);
                         }
                         else
                         {
-                            announcement.innerHTML = text.replaceAll("\n","<br>").replaceAll("\r","<br>");
+                            announcement.innerHTML = text;
                             announcement.style.opacity = "1";
                         }
                     }
@@ -229,17 +237,19 @@
                     }
                     else
                     {
+                        text = text.replaceAll("\n","<span class=\"break\"></span>")
+                            .replaceAll("\r","<span class=\"break\"></span>");
                         if (currentSlide.innerHTML === "")
                         {
                             currentSlide.style.opacity = "0";
                             setTimeout(function() {
-                                currentSlide.innerHTML = text.replaceAll("\n","<br>").replaceAll("\r","<br>");
+                                currentSlide.innerHTML = text;
                                 currentSlide.style.opacity = "1";
                             }, 500);
                         }
                         else
                         {
-                            currentSlide.innerHTML = text.replaceAll("\n","<br>").replaceAll("\r","<br>");
+                            currentSlide.innerHTML = text;
                             currentSlide.style.opacity = "1";
                         }
                     }
