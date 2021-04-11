@@ -1336,8 +1336,8 @@ function RemoveClient(socketID)
 
 function UpdateConnectedClients()
 {
-    let textClients = Clients.filter(function (obj) { return obj.roomType.toString() === "TextListeners"; });
-    let imageClients = Clients.filter(function (obj) { return obj.roomType.toString() === "ImageListeners"; });
+    let textClients = Clients.filter(function (obj) { return obj.roomType.toString() === "TextListener"; });
+    let imageClients = Clients.filter(function (obj) { return obj.roomType.toString() === "ImageListener"; });
     
     document.getElementById("textClientsNumber").innerHTML = textClients.length;
     document.getElementById("imageClientsNumber").innerHTML = imageClients.length;
