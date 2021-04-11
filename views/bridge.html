@@ -78,10 +78,14 @@
 }
 
 .onoffswitch-switch {
-    display: block; width: 21px; margin: 0px;
+    display: block;
+    width: 21px; 
+    margin: 0px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: : 106px;
     background: #A1A1A1;
-    position: absolute; top: 0; bottom: 0;
-    right: 106px;
     border: 2px solid #E3E3E3; border-radius: 36px;
     transition: all 0.3s ease-in 0s; 
 }
@@ -103,7 +107,8 @@
         height: 10px;
         width: 10px;
         border-radius: 50%;
-        display: inline-block;   
+        display: block;
+        float: right; 
     }
     .connected
     {
@@ -152,7 +157,6 @@
     
     #title
     {
-        position: absolute;
         display: inline;
         top: 5px;
         left: 10px;
@@ -166,12 +170,7 @@
     #divProPresenterConfig
     {
         background: #ffffff;
-        width: 250px;
-        height: 175px;
         padding: 5px;
-        position: absolute;
-        top: 50px;
-        left: 10px;
     }
     
     #divProPresenterConfig label
@@ -188,69 +187,28 @@
         display: inline-block;
     }
     
-    #spanProPresenterConnectionStatusCircle
-    {
-        position: absolute;
-        top: 5px;
-        left: 245px;
-    }
-    
-    #spanBridgeConnectionStatusCircle
-    {
-        position: absolute;
-        top: 5px;
-        left: 245px;
-    }
-    
     #divBridgeConfig
     {
         background: #ffffff;
-        width: 250px;
-        height: 175px;
         padding: 5px;
-        position: absolute;
-        top: 50px;
-        left: 275px;
     }
     
     #divConnectionStatus
     {
         background: #ffffff;
-        width: 515px;
-        height: 100px;
         padding: 5px;
-        position: absolute;
-        top: 240px;
-        left: 10px;
-        display: inline-block;
+        display: flex;
         visibility: visible;
         opacity: 1;
         transition: visibility 0s, opacity 0.5s linear;
     }
     
-    #divSendToBridge
-    {
-        position: absolute;
-        top: 5px;
-        left: 110px;
-    }
-    
-    #divGoToLogo
-    {
-        position: absolute;
-        top: 40px;
-        left: 110px;
-    }
-    
     #divLogContainer
     {
         background: #ffffff;
-        width: 515px;
-        height: 100px;
+        width: 100%;
+        height: 150px;
         padding: 5px;
-        position: absolute;
-        top: 570px;
-        left: 10px;
         margin: 0 auto;
         visibility: hidden;
         opacity: 0;
@@ -262,8 +220,6 @@
         background: #cccccc;
         font-family: monospace;
         padding: 5px;
-        width: 510px;
-        height: 100px;
         overflow-y: scroll;
         -webkit-user-select: text;
 
@@ -272,12 +228,7 @@
     #divProPresenterData_Container
     {
         background: #ffffff;
-        width: 515px;
-        height: 200px;
         padding: 5px;
-        position: absolute;
-        top: 355px;
-        left: 10px;
         text-align: center;
         visibility: hidden;
         opacity: 0;
@@ -292,154 +243,31 @@
         position: relative;
     }
     
-    #divProPresenter_CurrentSlide_Container
-    {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        display: none;
-    }
-    
-    #divProPresenter_CurrentSlide
-    {
-        background: #000000;
-        color: #ffffff;
-        width: 240px;
-        height: 135px;
-        padding: 5px;
-        display: inline-block;
-    }
-    
-    #divProPresenter_CurrentSlide_ImageContainer
-    {
-        position: absolute;
-        display: none;
-        top: 10px;
-        left: 265px;
-    }
-    
-    #divProPresenter_CurrentSlide_Image
-    {
-        background: #000000;
-        width: 250px;
-        height: 145px;
-        padding: 0px;
-        display: inline-block;
-    }
-    
-    #divProPresenter_CurrentSlide_Notes
-    {
-        display: none;
-    }
-    
-    #divProPresenter_NextSlide_Container
-    {
-        display: none;
-    }
-    
-    #divProPresenter_NextSlide
-    {
-        background: #000000;
-        color: #00ff00;
-        width: 240px;
-        height: 135px;
-        padding: 5px;
-        display: inline-block;
-    }
-    
-    #divProPresenter_NextSlide_Notes
-    {
-        display: block;
-    }
-    
-    #divProPresenter_PlaylistArea_Container
-    {
-        display:none;
-        top: 180px;
-        left: 10px;
-    }
-    
-    #divProPresenter_Playlists
-    {
-        display: inline;
-        vertical-align: top;
-        text-align: left;
-        width: 210px;
-        height: 200px;
-        overflow-y: scroll;
-    }
-    
-    #divProPresenter_PlaylistItems
-    {
-        display: inline;
-        vertical-align: top;
-        text-align: left;
-        width: 275px;
-        height: 200px;
-        overflow-y: scroll;
-    }
-    
-    #divProPresenter_PlaylistFollowControls
-    {
-        position: absolute;
-        top: 5px;
-        left: 250px;
-        display: none;
-    }
-    
     #btnConnectToProPresenter
     {
-        position: absolute;
-        top: 140px;
-        left: 155px;
-        width: 100px;
-        height: 40px;
         background-color: #3894ff;
         color: #ffffff;
     }
     
-    #selBridgeList
-    {
-        position: absolute;
-        top: 70px;
-        left: 80px;
-    }
-    
     #labelBridgeControlPassword
     {
-        position: absolute;
         font-size: 12px;
-        top: 103px;
-        left: 20px;
         display: none;
     }
     
     #txtBridgeControlPassword
     {
-        position: absolute;
-        top: 100px;
-        left: 80px;
         display: none;
     }
     
     #btnConnectToBridge
     {
-        position: absolute;
-        top: 140px;
-        left: 155px;
-        width: 100px;
-        height: 40px;
         background-color: #3894ff;
         color: #ffffff;
     }
     
     #btnDisconnectBridge
     {
-        position: absolute;
-        top: 140px;
-        left: 155px;
-        width: 100px;
-        height: 40px;
         background-color: #990000;
         color: #ffffff;
         display: none;
@@ -448,24 +276,13 @@
     #btnRefreshData
     {
         display: none;
-        width: 100px;
-        height: 80px;
         background-color: #3894ff;
         color: #ffffff;
-    }
-    
-    #divClearAll
-    {
-        position: absolute;
-        top: 5px;
-        left: 420px;
     }
     
     #btnClearAll
     {
         display: none;
-        width: 100px;
-        height: 80px;
         background-color: #3894ff;
         color: #ffffff;
     }
@@ -483,10 +300,7 @@
     #divProgressBar
     {
         width: 100px;
-        position: absolute;
         display:none;
-        left: 10px;
-        top: 5px;
         background-color: #908686;
     }
     
@@ -498,76 +312,10 @@
         background-color: #3894ff;
     }
     
-    #divProPresenter_PresentationItems_Container
-    {
-        background: #666666;
-        height: 655px;
-        min-width: 515px;
-        max-width: 100%;
-        position: absolute;
-        top: 50px;
-        left: 540px;
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility 0s, opacity 0.5s linear;
-    }
-    
-    #divProPresenter_PresentationItems_Title
-    {
-        background: #cccccc;
-        font-weight: bold;
-        font-size: 18px;
-        height: 20px;
-        padding: 5px;
-        z-index: 3;
-    }
-    
-    #divProPresenter_PresentationItems
-    {
-        height: 635px;
-        min-width: 515px;
-        overflow-y: scroll;
-    }
-    
-    .slideBox
-    {
-        width: 207px;
-        height: 139px;
-        display: inline-block;
-        border: #666666 5px solid;
-        border-radius: 5px;
-        margin: 0 auto;
-    }
-    
-    @keyframes selected-blink { 
-       50% { border-color: #ff0000; } 
-    }
-    
-    .innerslideBox
-    {
-        width: 200px;
-        height: 133px;
-        display: inline-block;
-        border: #eeeeee 3px solid;
-        border-radius: 5px;
-        margin: 0 auto;
-    }
-    
-    #divProPresenter_PresentationItems_Options
-    {
-        background: #cccccc;
-        height: 20px;
-        padding: 5px;
-        z-index: 3;
-    }
-        
     #settingsImage
     {
-        position: absolute;
         width: 20px;
         height: 20px;
-        top: 160px;
-        left: 5px;
     }
     
     #divAnnouncements
@@ -615,9 +363,6 @@
     
     #divKeepAwake
     {
-        position: absolute;
-        top: 40px;
-        left: 250px;
         display: none;
     }
     
@@ -628,18 +373,20 @@
         opacity: 0;
         transition: visibility 0s, opacity 0.5s linear;
     }
-    
-    #divProPresenter_PresentationItems_Options_Index
+
+    .wrapper-lr
     {
-        position: absolute;
-        left: 10px;
+        display: flex;
+        flex-direction: row;
+        margin: 2em;
+    }
+
+    .wrapper-ud
+    {
+        display: flex;
+        flex-direction: column;
     }
     
-    #divProPresenter_PresentationItems_Options_Zoom
-    {
-        position: absolute;
-        right: 10px;
-    }
 </style>
 <script type="text/javascript" src="/lib/jquery-1.12.0.min.js"></script>
 <script type="text/javascript" src="/lib/jquery.json.min.js"></script>
@@ -1380,7 +1127,7 @@ function Bridge_SendAnnouncement()
 
 function Bridge_RemoveAnnouncement()
 {
-    socket.emit("announcement", selectedBridgeID, null);
+    socket.emit("announcement", selectedBridgeID, "");
 }
 
 function Bridge_Reload()
@@ -1496,18 +1243,22 @@ function PresentationItems_ChangeZoom()
 <body onLoad="onLoad();">
 <div id="container">
     <div id="title"><span style="font-size: 36px; font-weight: bold; padding: 5px;">Presentation Bridge</span><a href="/about">About this software</a></div>
+    <div class="wrapper-lr">
         <div id="divProPresenterConfig">
-            <span style="font-weight:bold; font-size: 16px;">ProPresenter Config</span><br />
+            <span style="font-weight:bold; font-size: 16px;">ProPresenter Config</span>
+            <span id="spanProPresenterConnectionStatusCircle" class="dot disconnected_dot"></span>
+            <br />
             <label for="txtProPresenterIP">IP Address:</label><input type="text" id="txtProPresenterIP" value="192.168.11.75" size="15"/><br />
             <label for="txtProPresenterPort">Port:</label><input type="text" id="txtProPresenterPort" value="52174" size="6" /><br />
             <label for="txtProPresenterPassword">Control Password:</label><input type="password" id="txtProPresenterPassword" value="control22" /><br />
             <label for="txtProPresenterLibraryPath">Library Path:</label><input type="text" id="txtProPresenterLibraryPath" value="/Users/technician/Dropbox (FG)/ProPresenter Libraries/Auditorium 2 CG/" /><br />
-            <label for="rangeProPresenterSlideQuality">Image Quality:</label><input type="range" min="25" max="1920" value="960" id="rangeProPresenterSlideQuality" />
+            <label for="rangeProPresenterSlideQuality">Image Quality:</label><input type="range" min="25" max="1920" value="960" id="rangeProPresenterSlideQuality" /><br />
             <button id="btnConnectToProPresenter">Connect to ProPresenter</button>
-            <span id="spanProPresenterConnectionStatusCircle" class="dot disconnected_dot"></span>
         </div>
         <div id="divBridgeConfig">
-            <span style="font-weight:bold; font-size: 16px;">Bridge Config</span><br />
+            <span style="font-weight:bold; font-size: 16px;">Bridge Config</span>
+            <span id="spanBridgeConnectionStatusCircle" class="dot disconnected_dot"></span>
+            <br />
             <label id="labelBridgeList">Bridge:</label>
             <select id="selBridgeList" onchange="selBridgeList_ShowPassword();">
                 <option value="0">(select a bridge)</option>
@@ -1515,22 +1266,17 @@ function PresentationItems_ChangeZoom()
             <label id="labelBridgeControlPassword" for="txtBridgeControlPassword">Password:</label><input type="password" size="15" id="txtBridgeControlPassword" /><br />
             <button id="btnDisconnectBridge">Disconnect</button><br />
             <button id="btnConnectToBridge">Connect to Bridge</button><br />
-            <span id="spanBridgeConnectionStatusCircle" class="dot disconnected_dot"></span>
+            
             <a href="/config"><img id="settingsImage" src="images/settings.png" alt="Config" /></a>
         </div>
+    </div>
+    <div class="wrapper-lr">
         <div id="divConnectionStatus">
             <button id="btnRefreshData" disabled>Refresh ProPresenter Data</button>
             <div class="onoffswitch" id="divSendToBridge">
                 <input type="checkbox" class="onoffswitch-checkbox" id="chkSendToBridge">
                 <label class="onoffswitch-label" for="chkSendToBridge">
                     <span class="onoffswitch-inner onoffswitch-inner-senddata"></span>
-                    <span class="onoffswitch-switch"></span>
-                </label>
-            </div>
-            <div class="onoffswitch" id="divProPresenter_PlaylistFollowControls">
-                <input type="checkbox" class="onoffswitch-checkbox" id="chkPlaylistFollowsProPresenter" checked>
-                <label class="onoffswitch-label" for="chkPlaylistFollowsProPresenter">
-                    <span class="onoffswitch-inner onoffswitch-inner-playlist"></span>
                     <span class="onoffswitch-switch"></span>
                 </label>
             </div>
@@ -1552,60 +1298,30 @@ function PresentationItems_ChangeZoom()
                 <button id="btnClearAll">Clear All In ProPresenter</button>
             </div>
         </div>
+    </div>
+    <div class="wrapper-ud">
         <div id="divLogContainer">
             <div id="divProgressBar">
                 <div id="progressBar"></div>
             </div>
             <div id="divLog"></div>
         </div>
-    <div id="divProPresenterData_Container">
-        <div id="divProPresenterData">
-            <div id="divProPresenter_CurrentSlide_Container">
-                <div id="divProPresenter_CurrentSlide_Title">Current Slide Text</div>
-                <div id="divProPresenter_CurrentSlide"></div>
-                <div id="divProPresenter_CurrentSlide_Notes"></div>
-            </div>
-            <div id="divProPresenter_CurrentSlide_ImageContainer">
-                <div id="divProPresenter_CurrentSlide_ImageTitle">Current Slide Image</div>
-                <div id="divProPresenter_CurrentSlide_Image"></div>
-            </div>
-            <div id="divProPresenter_NextSlide_Container">
-                <div id="divProPresenter_NextSlide_Title">Next Slide</div>
-                <div id="divProPresenter_NextSlide"></div>
-                <div id="divProPresenter_NextSlide_Notes"></div>
-            </div>
-            <div id="divProPresenter_PlaylistArea_Container">
-                <div id="divProPresenter_Playlists"></div>
-                <div id="divProPresenter_PlaylistItems"></div>
-            </div>
+        <div id="divAnnouncements">
+            Redirect to:<br />
+            <input type="text" id="txtAnnouncements_URL" value="https://www.mebanebible.org" />
+            <button id="btnAnnouncements_RedirectTo">Redirect to URL</button>
+            <button id="btnAnnouncements_ReloadListeners">Remotely Reload All Listeners</button>
+            <br /><br />
+            Send text/announcement:<br />
+            <textarea rows="4" cols="50" id="txtAnnouncements_Text"></textarea>
+            <button id="btnAnnouncements_SendText">Display Announcement</button>
+            <button id="btnAnnouncements_RemoveText">Stop Announcement</button>
+        
         </div>
-    </div>
-    <div id="divProPresenter_PresentationItems_Container">
-        <div id="divProPresenter_PresentationItems_Title"></div>
-        <div id="divProPresenter_PresentationItems"></div>
-        <div id="divProPresenter_PresentationItems_Options">
-            <div id="divProPresenter_PresentationItems_Options_Index"></div>
-            <div id="divProPresenter_PresentationItems_Options_Zoom">
-                <label for="range_PresentationItems_Zoom">Zoom:</label>
-                <input type="range" min="1" max="3" value="1" step="0.1" id="range_PresentationItems_Zoom" oninput="PresentationItems_ChangeZoom();" />
-            </div>
+        <div id="divConnectedClients">
+            Connected Text Clients: <span id="textClientsNumber"></span><br />
+            Connected Image Clients: <span id="imageClientsNumber"></span>
         </div>
-    </div>
-    <div id="divAnnouncements">
-        Redirect to:<br />
-        <input type="text" id="txtAnnouncements_URL" value="https://www.mebanebible.org" />
-        <button id="btnAnnouncements_RedirectTo">Redirect to URL</button>
-        <button id="btnAnnouncements_ReloadListeners">Remotely Reload All Listeners</button>
-        <br /><br />
-        Send text/announcement:<br />
-        <textarea rows="4" cols="50" id="txtAnnouncements_Text"></textarea>
-        <button id="btnAnnouncements_SendText">Display Announcement</button>
-        <button id="btnAnnouncements_RemoveText">Stop Announcement</button>
-       
-    </div>
-    <div id="divConnectedClients">
-        Connected Text Clients: <span id="textClientsNumber"></span><br />
-        Connected Image Clients: <span id="imageClientsNumber"></span>
     </div>
 </div>
 </body>
