@@ -1306,8 +1306,8 @@ function BridgeRooms_Connect()
         RemoveClient(socketID);
     });
 
-    socket.on('bridgerooms_disconnected', function() {
-        console.log("Bridge disconnected suddenly.");
+    socket.on('bridgerooms_disconnected', function(bridgeId) {
+        console.log("Bridge disconnected suddenly:", bridgeId);
         BridgeRooms_Disconnect();
     });
 }
@@ -1370,6 +1370,7 @@ function BridgeRooms_Login()
 
 function BridgeRooms_Disconnect()
 {
+    console.log("Disconnecting from bridge:", selectedBridgeID);
     socket.emit("bridgerooms_disconnect", selectedBridgeID, false);
     document.getElementById("spanBridgeConnectionStatusCircle").className = "dot disconnected_dot";
     document.getElementById("btnConnectToBridge").style.display = "block";

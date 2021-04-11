@@ -216,6 +216,7 @@ io.sockets.on("connection", function(socket) {
     socket.on("bridgerooms_disconnect", function(bridgeID) {
        SetBridgeInUse(bridgeID, false);
        SetLogoMode(bridgeID, true);
+       RemoveClient(socket);
     });
     
     // LISTENER SOCKETS
@@ -499,7 +500,7 @@ function RemoveClient(socket)
             if (Clients[i].roomType === "Bridge")
             {
                 SetBridgeInUse(bridgeID, false);
-                io.to("BridgeRoom-" + bridgeID).emit("bridgerooms_disconnected");
+                io.to("Bridge").emit("bridgerooms_disconnected", bridgeID);
             }
             
             break;
