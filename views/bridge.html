@@ -11,7 +11,9 @@
     }
     
 .onoffswitch {
-    position: relative; width: 130px;
+    position: relative; 
+    width: 150px;
+    margin: 1em;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
 .onoffswitch-checkbox {
@@ -610,7 +612,8 @@ function setupRemoteSocket()
     
     webSocketRemote.send({"action":"authenticate","protocol":"600","password":config['propresenter_password']}).done(function() {
     }).fail(function(e) {
-        console.log(e);
+        updateLog("Could not setup remote socket. See console log.", "error");
+        console.log("Could not setup remote socket:", e);
     });    
 }
 
@@ -633,7 +636,8 @@ function requestPlaylists()
         
     webSocketRemote.send({"action":"playlistRequestAll"}).done(function() {
     }).fail(function(e) {
-        console.log(e);
+        updateLog("Could not get ProPresenter playlist. See console log.", "error");
+        console.log("Could not get ProPresenter playlist", e);
     });        
 }
 
@@ -643,7 +647,8 @@ function requestPresentationInfo(presentationName) // get the information about 
     let slideQuality = document.getElementById("rangeProPresenterSlideQuality").value;
     webSocketRemote.send({"action": "presentationRequest","presentationName": presentationName,"presentationPath": config['propresenter_librarypath'] + presentationName + ".pro6","presentationSlideQuality": slideQuality}).done(function() {
     }).fail(function(e) {
-        console.log(e);
+        updateLog("Could not get ProPresenter presentation info. See console log.", "error");
+        console.log("Could not get ProPresenter presentation info", e);
     });
 }
 
@@ -1099,6 +1104,7 @@ function BridgeRooms_Login()
 function BridgeRooms_Disconnect()
 {
     console.log("Disconnecting from bridge:", selectedBridgeID);
+    updateLog("Disconnecting from bridge: " + selectedBridgeID);
     socket.emit("bridgerooms_disconnect", selectedBridgeID, false);
     document.getElementById("spanBridgeConnectionStatusCircle").className = "dot disconnected_dot";
     document.getElementById("btnConnectToBridge").style.display = "block";
@@ -1133,6 +1139,7 @@ function Bridge_RemoveAnnouncement()
 function Bridge_Reload()
 {
     socket.emit("reload", selectedBridgeID, true);
+    updateLog("Reloading clients");
     console.log("reloading clients.");
 }
 
