@@ -388,9 +388,13 @@ io.sockets.on("connection", function(socket) {
     });
        
     socket.on("announcement", function(bridgeID, text) {
-       updateBridgeText(bridgeID, "announcement", text);
-       updateBridgeImage(bridgeID, "announcement", text);
-       console.log("sending announcement to: " + bridgeID, text);
+        updateBridgeText(bridgeID, "announcement", text);
+        updateBridgeImage(bridgeID, "announcement", text);
+        if (text == "") {
+           console.log("removing announcements on: " + bridgeID);
+        } else {
+            console.log("sending announcement to: " + bridgeID, text);
+        }
     });
     
     socket.on("redirect", function(bridgeID, url) {

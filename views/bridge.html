@@ -573,12 +573,6 @@
     #divAnnouncements
     {
         background: #ffffff;
-        width: 515px;
-        height: 125px;
-        padding: 5px;
-        position: absolute;
-        top: 690px;
-        left: 10px;
         visibility: hidden;
         opacity: 0;
         transition: visibility 0s, opacity 0.5s linear;
@@ -591,12 +585,7 @@
     
     #btnAnnouncements_RedirectTo
     {
-        position: absolute;
-        top: 10px;
-        left: 215px;
-        width: 100px;
-        height: 40px;
-        background-color: #3894ff;
+        background-color: #00a716;
         color: #ffffff;
     }
     
@@ -608,23 +597,19 @@
     
     #btnAnnouncements_SendText
     {
-        position: absolute;
-        top: 80px;
-        left: 215px;
-        width: 100px;
-        height: 40px;
         background-color: #3894ff;
+        color: #ffffff;
+    }
+
+    #btnAnnouncements_RemoveText
+    {
+        background-color: #ff3838;
         color: #ffffff;
     }
     
     #btnAnnouncements_ReloadListeners
     {
-        position: absolute;
-        top: 75px;
-        left: 415px;
-        width: 100px;
-        height: 50px;
-        background-color: #3894ff;
+        background-color: #001935;
         color: #ffffff;
     }
     
@@ -639,12 +624,6 @@
     #divConnectedClients
     {
         background: #ffffff;
-        width: 515px;
-        height: 65px;
-        padding: 5px;
-        position: absolute;
-        top: 750px;
-        left: 540px;
         visibility: hidden;
         opacity: 0;
         transition: visibility 0s, opacity 0.5s linear;
@@ -715,6 +694,10 @@ function onLoad()
     
     document.getElementById("btnAnnouncements_SendText").addEventListener("click", function (e) {
         Bridge_SendAnnouncement();
+    });
+
+    document.getElementById("btnAnnouncements_RemoveText").addEventListener("click", function (e) {
+        Bridge_RemoveAnnouncement();
     });
     
     document.getElementById("btnAnnouncements_ReloadListeners").addEventListener("click", function (e) {
@@ -1395,6 +1378,11 @@ function Bridge_SendAnnouncement()
     socket.emit("announcement", selectedBridgeID, document.getElementById("txtAnnouncements_Text").value);
 }
 
+function Bridge_RemoveAnnouncement()
+{
+    socket.emit("announcement", selectedBridgeID, null);
+}
+
 function Bridge_Reload()
 {
     socket.emit("reload", selectedBridgeID, true);
@@ -1607,11 +1595,13 @@ function PresentationItems_ChangeZoom()
         Redirect to:<br />
         <input type="text" id="txtAnnouncements_URL" value="https://www.mebanebible.org" />
         <button id="btnAnnouncements_RedirectTo">Redirect to URL</button>
+        <button id="btnAnnouncements_ReloadListeners">Remotely Reload All Listeners</button>
         <br /><br />
         Send text/announcement:<br />
         <textarea rows="4" cols="50" id="txtAnnouncements_Text"></textarea>
-        <button id="btnAnnouncements_SendText">Send</button>
-        <button id="btnAnnouncements_ReloadListeners">Remotely Reload All Listeners</button>
+        <button id="btnAnnouncements_SendText">Display Announcement</button>
+        <button id="btnAnnouncements_RemoveText">Stop Announcement</button>
+       
     </div>
     <div id="divConnectedClients">
         Connected Text Clients: <span id="textClientsNumber"></span><br />
