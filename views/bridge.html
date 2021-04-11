@@ -705,6 +705,7 @@ function onLoad()
     });
     
     document.getElementById("btnDisconnectBridge").addEventListener("click", function (e) {
+        updateLog("Disconnected from Bridge");
         BridgeRooms_Disconnect();
     });
     
@@ -744,34 +745,31 @@ function onLoad()
     BridgeRooms_Connect();
 }
 
-function updateLog(text, cssClass)
+function updateLog(text, cssClass = "normal")
 {
     let divLog = document.getElementById("divLog");
+    let divLogWrapper = document.createElement("div");
+
     //let oldSpan = document.createElement("span"); // we put the existing contents of the log here first
-    //let spanTimeStamp = document.createElement("span"); // date/time stamp for log
+    let spanTimeStamp = document.createElement("span"); // date/time stamp for log
     let span = document.createElement("span"); // new log entry
     
     //oldSpan.innerHTML = divLog.innerHTML;
     //divLog.innerHTML = "";
     //oldSpan.className = "expired";
     
-    /*let d = new Date();
-    let dateTimeString = "";
-    
-    dateTimeString += d.getMonth() + "/" + d.getDate() + "/" + d.getFullYear();
-    dateTimeString += ((d.getHours() + 11) % 12 + 1) + ":" + (10 > d.getMinutes() ? "0" : "") + d.getMinutes();
-    dateTimeString += (10 > d.getSeconds() ? "0" : "") + d.getSeconds();
-    dateTimeString += d.getHours() >= 12 ? "pm" : "am";
-    
-    spanTimeStamp.innerHTML = dateTimeString;*/
-    
+    let d = new Date();
+    let dateTimeString = d.toLocaleString();
+    spanTimeStamp.innerHTML = dateTimeString;
+    spanTimeStamp.style.marginRight = "5px";
+
     span.innerHTML = text;
     span.className = cssClass;
-    span.style.display = "block";
     
     //divLog.appendChild(oldSpan);
-    //divLog.appendChild(spanTimeStamp);
-    divLog.appendChild(span);
+    divLogWrapper.appendChild(spanTimeStamp);
+    divLogWrapper.appendChild(span);
+    divLog.append(divLogWrapper);
     divLog.scrollTop = divLog.scrollHeight;
 }
 
@@ -1307,7 +1305,7 @@ function BridgeRooms_Connect()
     });
 
     socket.on('bridgerooms_disconnected', function(bridgeId) {
-        console.log("Bridge disconnected suddenly:", bridgeId);
+        updateLog("Bridge disconnected suddenly", "error");
         BridgeRooms_Disconnect();
     });
 }
