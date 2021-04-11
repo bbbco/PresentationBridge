@@ -446,24 +446,17 @@ io.sockets.on("connection", function(socket) {
 
 function SetBridgeInUse(bridgeID, value)
 {
-    for (let i = 0; i < Bridges.length; i++)
-    {
-        if (Bridges[i].id === bridgeID)
-        {
-            Bridges[i].inUse = value;
-            console.log("Updating listeners with bridge status: " + value);
-            io.to("TextListener-" + bridgeID).emit("bridgeinuse", value);
-            io.to("ImageListener-" + bridgeID).emit("bridgeinuse", value);
-            io.to("StageDisplayListener-" + bridgeID).emit("bridgeinuse", value);
-            break;
-        }
-    }
+    let bridgeObj = GetBridge(bridgeID);
+    bridgeObj.inUse = value;
+    console.log("Updating listeners with bridge status: " + value);
+    io.to("TextListener-" + bridgeID).emit("bridgeinuse", value);
+    io.to("ImageListener-" + bridgeID).emit("bridgeinuse", value);
+    io.to("StageDisplayListener-" + bridgeID).emit("bridgeinuse", value);
 }
 
 function GetBridgeInUse(bridgeID)
 {
-    let bridgeObj = Bridges.find(function (obj) { return obj.id.toString() === bridgeID; });
-    
+    let bridgeObj = GetBridge(bridgeID);
     return bridgeObj.inUse;
 }
 

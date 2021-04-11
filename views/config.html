@@ -483,6 +483,7 @@ function AddBridge()
     bridgeObj.foregroundColor = document.getElementById("colorpickerBridgeForegroundColor").value;
     bridgeObj.backgroundColor = document.getElementById("colorpickerBridgeBackgroundColor").value;
     bridgeObj.font = document.getElementById("selectBridgeFont").options[document.getElementById("selectBridgeFont").selectedIndex].value;
+    bridgeObj.inUse = false;
     
     socket.emit("config_bridgeroom_add", bridgeObj); // send it to the server
 }
