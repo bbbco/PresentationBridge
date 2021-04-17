@@ -543,7 +543,6 @@ function ConnectToProPresenter()
         
     // Stage Display incoming messages
     webSocketStageDisplay.listen(function(message) {
-        console.log("WS Stage:", message);
         switch(message.acn)
         {
             case "ath":
@@ -575,17 +574,18 @@ function ConnectToProPresenter()
                 //add support for video countdowns
                 break;
             case "fv":
-                let currentSlide = message.ary[0].txt;
-                let currentSlide_notes = message.ary[2].txt;
-                let nextSlide = message.ary[1].txt;
-                let nextSlide_notes = message.ary[3].txt;
-                console.log(currentSlide, currentSlide_notes, nextSlide, nextSlide_notes);
+                if (message.ary[0].acn == "cs") {
+                    let currentSlide = message.ary[0].txt;
+                    let currentSlide_notes = message.ary[2].txt;
+                    let nextSlide = message.ary[1].txt;
+                    let nextSlide_notes = message.ary[3].txt;
+                    console.log(currentSlide, currentSlide_notes, nextSlide, nextSlide_notes);
 
-                updateTextListeners("current_slide", currentSlide);
-                updateTextListeners("current_slide_notes", currentSlide_notes);
-                updateTextListeners("next_slide", nextSlide);
-                updateTextListeners("next_slide_notes", nextSlide_notes);
-
+                    updateTextListeners("current_slide", currentSlide);
+                    updateTextListeners("current_slide_notes", currentSlide_notes);
+                    updateTextListeners("next_slide", nextSlide);
+                    updateTextListeners("next_slide_notes", nextSlide_notes);
+                }
                 break;
             default:
                 console.log(message);
