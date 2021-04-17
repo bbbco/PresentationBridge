@@ -199,7 +199,7 @@
         transition: visibility 0s, opacity 0.5s linear;
     }
     
-    .deleteLogoButton
+    .deleteImgButton
     {
         font-size: 18px;
         background: #990000;
@@ -379,6 +379,9 @@ function ShowAddBridgeFields()
     document.getElementById("fileBridgeLogo").value = "";
     document.getElementById("fileBridgeLogo").style.display = "inline-block";
     document.getElementById("divBridgeCurrentLogo").innerHTML = "";
+    document.getElementById("fileBridgeFavicon").value = "";
+    document.getElementById("fileBridgeFavicon").style.display = "inline-block";
+    document.getElementById("divBridgeCurrentFavicon").innerHTML = "";
     document.getElementById("colorpickerBridgeForegroundColor").value = "#FFFFFF";
     document.getElementById("colorpickerBridgeBackgroundColor").value = "#000000";
     document.getElementById("selectBridgeFont").selectedIndex = 0;
@@ -428,9 +431,25 @@ function ShowEditBridgeFields()
             
             let divDeleteLogo = document.createElement("div");
             divDeleteLogo.innerHTML = "&times";
-            divDeleteLogo.className = "deleteLogoButton";
-            divDeleteLogo.setAttribute('onclick', 'DeleteLogo();');
+            divDeleteLogo.className = "deleteImgButton";
+            divDeleteLogo.setAttribute('onclick', 'DeleteImg("Logo");');
             document.getElementById("divBridgeCurrentLogo").appendChild(divDeleteLogo);
+        }
+        document.getElementById("fileBridgeFavicon").value = ""; // need to show image inside div
+        if (bridgeObj.favicon)
+        {
+            let imgCurrentFavicon = document.createElement("img");
+            imgCurrentFavicon.src = bridgeObj.favicon;
+            imgCurrentFavicon.height = "100";          
+            document.getElementById("divBridgeCurrentFavicon").innerHTML = "";
+            document.getElementById("divBridgeCurrentFavicon").appendChild(imgCurrentFavicon);
+            document.getElementById("fileBridgeFavicon").style.display = "none";
+            
+            let divDeleteFavicon = document.createElement("div");
+            divDeleteFavicon.innerHTML = "&times";
+            divDeleteFavicon.className = "deleteImgButton";
+            divDeleteFavicon.setAttribute('onclick', 'DeleteImg("Favicon");');
+            document.getElementById("divBridgeCurrentFavicon").appendChild(divDeleteFavicon);
         }
         document.getElementById("colorpickerBridgeForegroundColor").value = bridgeObj.foregroundColor;
         document.getElementById("colorpickerBridgeBackgroundColor").value = bridgeObj.backgroundColor;
@@ -453,10 +472,10 @@ function ShowEditBridgeFields()
     }
 }
 
-function DeleteLogo()
+function DeleteImg(desc)
 {
-    document.getElementById("divBridgeCurrentLogo").innerHTML = "";
-    document.getElementById("fileBridgeLogo").style.display = "inline-block";
+    document.getElementById("divBridgeCurrent" + desc).innerHTML = "";
+    document.getElementById("fileBridge" + desc).style.display = "inline-block";
 }
 
 function AddBridge()
@@ -470,21 +489,31 @@ function AddBridge()
     bridgeObj.allowText = document.getElementById("chkBridgeAllowText").checked;
     bridgeObj.allowImage = document.getElementById("chkBridgeAllowImage").checked;
     bridgeObj.allowStageDisplay = document.getElementById("chkBridgeAllowStageDisplay").checked;
-    let divImg = document.getElementById("divBridgeCurrentLogo");
-    let img = divImg.getElementsByTagName("img");
-    if (img.length > 0)
+    let divLogoImg = document.getElementById("divBridgeCurrentLogo");
+    let logoImg = divLogoImg.getElementsByTagName("img");
+    if (logoImg.length > 0)
     {
-        bridgeObj.logo = img[0].src;
+        bridgeObj.logo = logoImg[0].src;
     }
     else
     {
         bridgeObj.logo = "";
     }
+    let divFaviconImg = document.getElementById("divBridgeCurrentFavicon");
+    let faviconImg = divFaviconImg.getElementsByTagName("img");
+    if (faviconImg.length > 0)
+    {
+        bridgeObj.favicon = faviconImg[0].src;
+    }
+    else
+    {
+        bridgeObj.favicon = "";
+    }
     bridgeObj.foregroundColor = document.getElementById("colorpickerBridgeForegroundColor").value;
     bridgeObj.backgroundColor = document.getElementById("colorpickerBridgeBackgroundColor").value;
     bridgeObj.font = document.getElementById("selectBridgeFont").options[document.getElementById("selectBridgeFont").selectedIndex].value;
     bridgeObj.inUse = false;
-    
+
     socket.emit("config_bridgeroom_add", bridgeObj); // send it to the server
 }
 
@@ -505,15 +534,25 @@ function UpdateBridge()
     bridgeObj.allowText = document.getElementById("chkBridgeAllowText").checked;
     bridgeObj.allowImage = document.getElementById("chkBridgeAllowImage").checked;
     bridgeObj.allowStageDisplay = document.getElementById("chkBridgeAllowStageDisplay").checked;
-    let divImg = document.getElementById("divBridgeCurrentLogo");
-    let img = divImg.getElementsByTagName("img");
-    if (img.length > 0)
+    let divLogoImg = document.getElementById("divBridgeCurrentLogo");
+    let logoImg = divLogoImg.getElementsByTagName("img");
+    if (logoImg.length > 0)
     {
-        bridgeObj.logo = img[0].src;
+        bridgeObj.logo = logoImg[0].src;
     }
     else
     {
         bridgeObj.logo = "";
+    }
+    let divFaviconImg = document.getElementById("divBridgeCurrentFavicon");
+    let faviconImg = divFaviconImg.getElementsByTagName("img");
+    if (faviconImg.length > 0)
+    {
+        bridgeObj.favicon = faviconImg[0].src;
+    }
+    else
+    {
+        bridgeObj.favicon = "";
     }
     bridgeObj.foregroundColor = document.getElementById("colorpickerBridgeForegroundColor").value;
     bridgeObj.backgroundColor = document.getElementById("colorpickerBridgeBackgroundColor").value;
@@ -531,9 +570,9 @@ function DeleteBridge()
     socket.emit("config_bridgeroom_delete", bridgeObj); // send it to the server
 }
 
-function encodeImageFileAsURL()
+function encodeImageFileAsURL(desc)
 {
-    filesSelected = document.getElementById("fileBridgeLogo").files;
+    filesSelected = document.getElementById("fileBridge" + desc).files;
     
     if (filesSelected.length > 0)
     {
@@ -548,8 +587,8 @@ function encodeImageFileAsURL()
             newImage.src = srcData;
             newImage.height = "100";
 
-            document.getElementById("divBridgeCurrentLogo").appendChild(newImage);
-            document.getElementById("fileBridgeLogo").style.display = "none";
+            document.getElementById("divBridgeCurrent" + desc).appendChild(newImage);
+            document.getElementById("fileBridge" + desc).style.display = "none";
             document.getElementById("divBridgeFields").style.height = "375px";
             document.getElementById("divAddButton").style.top = "330px";
             document.getElementById("divCancelButton").style.top = "330px";
@@ -584,7 +623,8 @@ function ChangePassword()
             <label for="chkBridgeAllowText">Allow Text Listeners</label><input type="checkbox" id="chkBridgeAllowText" checked /><br />
             <label for="chkBridgeAllowImage">Allow Image Listeners</label><input type="checkbox" id="chkBridgeAllowImage" checked /><br />
             <label for="chkBridgeAllowStageDisplay">Allow Stage Display</label><input type="checkbox" id="chkBridgeAllowStageDisplay" checked /><br />
-            <label for="fileBridgeLogo">Logo:</label><input type="file" id="fileBridgeLogo" onchange="encodeImageFileAsURL()" /><div id="divBridgeCurrentLogo"></div><br />
+            <label for="fileBridgeLogo">Logo:</label><input type="file" id="fileBridgeLogo" onchange="encodeImageFileAsURL('Logo')" /><div id="divBridgeCurrentLogo"></div><br />
+            <label for="fileBridgeFavicon">Favicon:</label><input type="file" id="fileBridgeFavicon" onchange="encodeImageFileAsURL('Favicon')" /><div id="divBridgeCurrentFavicon"></div><br />
             <label for="colorpickerBridgeForegroundColor">Foreground Color (Text):</label><input type="color" id="colorpickerBridgeForegroundColor" /><br />
             <label for="colorpickerBridgeBackgroundColor">Background Color:</label><input type="color" id="colorpickerBridgeBackgroundColor" /><br />
             <label for="selectBridgeFont">Font:</label><select id="selectBridgeFont">
