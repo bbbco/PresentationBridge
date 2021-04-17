@@ -212,8 +212,8 @@
         height: 150px;
         padding: 5px;
         margin: 0 auto;
-        visibility: hidden;
-        opacity: 0;
+        visibility: visible;
+        opacity: 1;
         transition: visibility 0s, opacity 0.5s linear;
     }
     
@@ -311,6 +311,7 @@
     {
         width: 1%;
         -webkit-transition: width 1s;
+        transition: width 1s;
         height: 15px;
         background-color: #3894ff;
     }
@@ -479,7 +480,7 @@ function onLoad()
 }
 
 function updateLog(text, cssClass = "normal")
-{
+{ 
     let divLog = document.getElementById("divLog");
     let divLogWrapper = document.createElement("div");
 
@@ -516,7 +517,8 @@ function ConnectToProPresenter()
     setupStageDisplaySocket();
     setupRemoteSocket();
     
-    webSocketRemote.listen(function(message) {                    
+    webSocketRemote.listen(function(message) {   
+        console.log("WS Remote:", message);                 
         switch(message.action)
         {
             case "authenticate":
@@ -547,6 +549,7 @@ function ConnectToProPresenter()
         
     // Stage Display incoming messages
     webSocketStageDisplay.listen(function(message) {
+        console.log("WS Stage:", message);
         switch(message.acn)
         {
             case "ath":
@@ -561,18 +564,12 @@ function ConnectToProPresenter()
                     document.getElementById("txtProPresenterLibraryPath").disabled = true;
                     document.getElementById("btnRefreshData").style.display = "block";
                     document.getElementById("btnClearAll").style.display = "block";
-                    document.getElementById("divProPresenter_PlaylistFollowControls").style.display = "block";
-                    document.getElementById("divProPresenterData_Container").style.visibility = "visible";
-                    document.getElementById("divProPresenterData_Container").style.opacity = "1";
-                    document.getElementById("divLogContainer").style.visibility = "visible";
-                    document.getElementById("divLogContainer").style.opacity = "1";             
+            
                 }
                 else
                 {
                     updateLog("Error connecting to ProPresenter. Invalid pasword. " + message.err, "error");
                     document.getElementById("spanProPresenterConnectionStatusCircle").className = "dot error_dot";
-                    document.getElementById("divLogContainer").style.visibility = "visible";
-                    document.getElementById("divLogContainer").style.opacity = "1";
                 }
                 break;
             case "sys":
@@ -588,12 +585,8 @@ function ConnectToProPresenter()
                 let currentSlide_notes = message.ary[2].txt;
                 let nextSlide = message.ary[1].txt;
                 let nextSlide_notes = message.ary[3].txt;
-                              
-                document.getElementById("divProPresenter_CurrentSlide").innerHTML = currentSlide.replaceAll("\n","<br>").replaceAll("\r","<br>");
-                document.getElementById("divProPresenter_CurrentSlide_Notes").innerHTML = currentSlide_notes.replaceAll("\n","<br>").replaceAll("\r","<br>");
-                document.getElementById("divProPresenter_NextSlide").innerHTML = nextSlide.replaceAll("\n","<br>").replaceAll("\r","<br>");
-                document.getElementById("divProPresenter_NextSlide_Notes").innerHTML = nextSlide_notes.replaceAll("\n","<br>").replaceAll("\r","<br>");
-                
+                console.log(currentSlide, currentSlide_notes, nextSlide, nextSlide_notes);
+
                 updateTextListeners("current_slide", currentSlide);
                 updateTextListeners("current_slide_notes", currentSlide_notes);
                 updateTextListeners("next_slide", nextSlide);
@@ -627,10 +620,6 @@ function requestPlaylists()
     playlist_items_toprocess = 0;
     document.getElementById("btnRefreshData").disabled = true;
     __bridgeEnabled = false;
-    document.getElementById("divProPresenter_Playlists").style.display = "none";
-    document.getElementById("divProPresenter_Playlists").innerHTML = "";
-    document.getElementById("divProPresenter_PlaylistItems").style.display = "none";
-    document.getElementById("divProPresenter_PlaylistItems").innerHTML = "";
 
     document.getElementById("chkSendToBridge").checked = false;
     updateLog("Requesting All Playlist Information.", "normal");
@@ -651,50 +640,6 @@ function requestPresentationInfo(presentationName) // get the information about 
         updateLog("Could not get ProPresenter presentation info. See console log.", "error");
         console.log("Could not get ProPresenter presentation info", e);
     });
-}
-
-function findPresentation(slideObj) // find the presentation based on the trigger index and determine where we are in the song
-{
-    for (let i = 0; i < Presentations.length; i++)
-    {
-        if (Presentations[i].location === slideObj.presentationPath)
-        {
-            //this is the right presentation
-            let imgObj = document.createElement("img");
-            let imgData = Presentations[i].presentationData[slideObj.slideIndex].slideImage;
-            imgObj.src = "data:image/png;base64," + imgData;
-            imgObj.width = "250";
-            imgObj.height = "145";
-            //imgObj.style.display = "inline-block";
-            document.getElementById("divProPresenter_CurrentSlide_Image").innerHTML = "";
-            document.getElementById("divProPresenter_CurrentSlide_Image").appendChild(imgObj);
-            updateImageListeners("current_slide_image", imgData);
-            
-            if (document.getElementById("chkPlaylistFollowsProPresenter").checked)
-            {
-                updateDiv_PresentationItems(slideObj.presentationPath);
-            }
-
-            if (slideObj.presentationPath === selectedPresentation) //if this presentation is the one currently in the container
-            {
-                //loop through all child elements in array and find the one that matches the slide index, draw a border around it
-                let divContainer = document.getElementById("divProPresenter_PresentationItems");
-                let innerDivs = divContainer.childNodes;
-                for (let j = 0; j < innerDivs.length; j++)
-                {
-                    innerDivs[j].style.removeProperty("animation");
-                    if (innerDivs[j].id === "divSlide-" + slideObj.slideIndex)
-                    {
-                        innerDivs[j].style.animation = "selected-blink 1.5s ease infinite alternate";
-                        innerDivs[j].scrollIntoView({behavior: 'smooth', block: 'start'});
-                        let divIndex = document.getElementById("divProPresenter_PresentationItems_Options_Index");
-                        divIndex.innerHTML = "Slide " + (slideObj.slideIndex+1) + "/" + innerDivs.length;
-                    }
-                }
-            }
-            break;
-        }        
-    }
 }
 
 function ProPresenter_ClearAll()
@@ -726,7 +671,7 @@ function ProPresenter_Clear(layer)
         webSocketRemote.send({"action": actionString}).done(function() {
             console.log("COMMAND SENT: " + actionString);
         }).fail(function(e) {
-            console.log(e);
+            console.error(e);
         });
     }
 }
@@ -763,200 +708,7 @@ function ProPresenterAPI_AddPlaylistsToArray(playlistsObj)
 
 function ProPresenterAPI_AddPresentationToArray(presentationObj)
 {
-    //loop through global presentation array until we find the one that matches this song name, and then add the data to it
-    for (let i = 0; i < Presentations.length; i++)
-    {
-        if (Presentations[i].name === presentationObj.presentation.presentationName)
-        {
-            //Presentations[i].presentationData = presentationObj.presentation.presentationSlideGroups;
-            
-            //decrement the global array of playlist items now that we've received this one
-            playlist_items_toprocess--;
-            
-            Presentations[i].presentationData = [];
-            for (let j = 0; j < presentationObj.presentation.presentationSlideGroups.length; j++)
-            {
-                for (let k = 0; k < presentationObj.presentation.presentationSlideGroups[j].groupSlides.length; k++)
-                {
-                    let presentationDataObj = {};
-                    presentationDataObj.slideAttachmentMask = presentationObj.presentation.presentationSlideGroups[j].groupSlides[k].slideAttachmentMask;
-                    presentationDataObj.slideColor = presentationObj.presentation.presentationSlideGroups[j].groupSlides[k].slideColor;
-                    presentationDataObj.slideEnabled = presentationObj.presentation.presentationSlideGroups[j].groupSlides[k].slideEnabled;
-                    presentationDataObj.slideImage = presentationObj.presentation.presentationSlideGroups[j].groupSlides[k].slideImage;
-                    presentationDataObj.slideIndex = presentationObj.presentation.presentationSlideGroups[j].groupSlides[k].slideIndex;
-                    presentationDataObj.slideLabel = presentationObj.presentation.presentationSlideGroups[j].groupSlides[k].slideLabel;
-                    presentationDataObj.slideNotes = presentationObj.presentation.presentationSlideGroups[j].groupSlides[k].slideNotes;
-                    presentationDataObj.slideText = presentationObj.presentation.presentationSlideGroups[j].groupSlides[k].slideText;
-                    presentationDataObj.slideTransitionType = presentationObj.presentation.presentationSlideGroups[j].groupSlides[k].slideTransitionType;
-                    Presentations[i].presentationData.push(presentationDataObj);
-                }
-            }
-            break;
-        }
-    }
-    
-    if (playlist_items_toprocess === 0) // we are done processing, so let's enable the bridge to work
-    {
-        __bridgeEnabled = true;
-        updateLog("All playlist data received.", "connected");
-        document.getElementById("btnRefreshData").disabled = false;
-        document.getElementById("chkSendToBridge").checked = true;
-        document.getElementById("divProgressBar").style.display = "none";
-        updateDiv_Playlists();
-        document.getElementById("divProPresenter_Playlists").style.display = "inline-block";
-        document.getElementById("divProPresenter_PlaylistItems").style.display = "inline-block";
-    }
-    else
-    {
-        document.getElementById("divProgressBar").style.display = "block";
-        let progressBar = document.getElementById("progressBar");
-        let width = playlist_items_toprocess;
-        let totalWidth = playlist_items_total;
-        let progressWidth = 100 - ((width / totalWidth) * 100);
-        progressBar.style.width = progressWidth + '%';
-        
-        __bridgeEnabled = false;
-        document.getElementById("btnRefreshData").disabled = true;
-        document.getElementById("chkSendToBridge").checked = false;
-    }
-}
-
-function updateDiv_Playlists()
-{
-    let divPlaylists = document.getElementById("divProPresenter_Playlists");
-    divPlaylists.innerHTML = "";
-    let ulPlaylists = document.createElement("ul");
-    ulPlaylists.className = "w3-ul w3-hoverable";
-    
-    for (let i = 0; i < Playlists.length; i++)
-    {
-        let liPlaylist = document.createElement("li");
-        liPlaylist.innerHTML = Playlists[i].name;
-        liPlaylist.setAttribute('onclick', 'updateDiv_PlaylistItems(' + i + ');');
-        ulPlaylists.appendChild(liPlaylist);
-    }
-    
-    ulPlaylists.selectedIndex = 0;
-    
-    divPlaylists.innerHTML = "";
-    divPlaylists.appendChild(ulPlaylists);
-    document.getElementById("divProPresenter_PlaylistArea_Container").style.display = "block";
-}
-
-function updateDiv_PlaylistItems(index)
-{
-    let divPlaylistItems = document.getElementById("divProPresenter_PlaylistItems");
-    let ulPlaylistItems = document.createElement("ul");
-    ulPlaylistItems.className = "w3-ul w3-hoverable";
-        
-    for (let i = 0; i < Playlists[index].items.length; i++)
-    {
-        let liItem = document.createElement("li");
-        liItem.innerHTML = Playlists[index].items[i].playlistItemName;
-        liItem.setAttribute('onclick', 'updateDiv_PresentationItems("' + Playlists[index].items[i].playlistItemLocation + '");');
-        ulPlaylistItems.appendChild(liItem);
-    }
-    
-    ulPlaylistItems.selectedIndex = 0;
-    
-    divPlaylistItems.innerHTML = "";
-    divPlaylistItems.appendChild(ulPlaylistItems);
-}
-
-function updateDiv_PresentationItems(presentationLocation)
-{
-    var divContainer = document.getElementById("divProPresenter_PresentationItems");
-    divContainer.style.backgroundColor = "#666666";
-    
-    selectedPresentation = presentationLocation;
-    
-    for (let i = 0; i < Presentations.length; i++)
-    {
-        if (Presentations[i].location === presentationLocation)
-        {
-            document.getElementById("divProPresenter_PresentationItems_Title").innerHTML = Presentations[i].name;
-            divContainer.innerHTML = ""; //clear out the slides that were there before
-            for (let j = 0; j < Presentations[i].presentationData.length; j++)
-            {
-                let divObj = document.createElement("div");
-                let divInnerObj = document.createElement("div");
-                let imgObj = document.createElement("img");
-                imgObj.src = "data:image/png;base64," + Presentations[i].presentationData[j].slideImage;
-                imgObj.style.width = "100%";
-                imgObj.style.display = "block";
-                imgObj.alt = Presentations[i].presentationData[j].slideNotes;
-                divInnerObj.appendChild(imgObj);
-                
-                let slideColor = Presentations[i].presentationData[j].slideColor;
-                let slideLabel = Presentations[i].presentationData[j].slideLabel;
-                let divLabelObj = document.createElement("div");
-                divLabelObj.style.width = "100%";
-                divLabelObj.style.height = "22px";
-                divLabelObj.style.textAlign = "left";
-                divLabelObj.style.fontSize = "13px";
-                divLabelObj.style.display = "block";
-                divLabelObj.style.verticalAlign = "middle";
-                divLabelObj.style.whiteSpace = "nowrap";
-                divLabelObj.style.overflow = "hidden";
-                divLabelObj.style.textOverflow = "ellipsis";
-                divLabelObj.innerHTML = (j+1) + "." + slideLabel;
-                divLabelObj.style.backgroundColor = "#cccccc";
-                if (slideColor !== "")
-                {
-                    let rgbArr = slideColor.split(" ");
-                    let R = rgbArr[0];
-                    let G = rgbArr[1];
-                    let B = rgbArr[2];
-                    let A = rgbArr[3];
-                    
-                    let rgbaString = "rgba(" + (255 * R) + ", " + (255 * G) + ", " + (255 * B) + ", " + A + ")";
-                    divLabelObj.style.backgroundColor = rgbaString;
-                    divInnerObj.style.borderColor = rgbaString;
-                }
-                divInnerObj.appendChild(divLabelObj);
-                divInnerObj.className = "innerslideBox";
-                divInnerObj.id="divInnerSlide-" + j;
-                divObj.className = "slideBox";
-                divObj.style.zoom = document.getElementById("range_PresentationItems_Zoom").value;
-                divObj.appendChild(divInnerObj);
-                divObj.id = "divSlide-" + j;
-                if (!Presentations[i].presentationData[j].slideEnabled)
-                {
-                    divObj.style.opacity = "0.3";
-                }
-                divContainer.appendChild(divObj);
-            }
-            
-            //select the playlist name, if follow playlist is checked
-            /*let selPlaylists = document.getElementById("divProPresenter_Playlists");
-            let li_Playlists_items = selPlaylists.getElementsByTagName("li");
-            for (var j = 0; j < li_Playlists_items.length; j++)
-            {
-                li_Playlists_items[j].style.background = "#ffffff";
-                if (j === Presentations[i].playListNumber)
-                {
-                    li_Playlists_items[j].style.background = "#82b1ff";
-                    updateDiv_PlaylistItems(index);
-                }
-            }
-            
-            let selPlaylistItems = document.getElementById("divProPresenter_PlaylistItems");
-            let li_PlaylistItems_items = selPlaylistItems.getElementsByTagName("li");
-            for (var j = 0; j < li_PlaylistItems_items.length; j++)
-            {
-                li_PlaylistItems_items[j].style.background = "#ffffff";
-                if (j === Presentations[i].playListIndex)
-                {
-                    li_Playlists_items[j].style.background = "#82b1ff";
-                }
-            }*/
-
-            break;
-        }
-    }
-    
-    document.getElementById("divProPresenter_PresentationItems_Container").style.visibility = "visible";
-    document.getElementById("divProPresenter_PresentationItems_Container").style.opacity = "1";
+    console.log("ProPresenterAPI_AddPresentationToArray:", presentationObj);
 }
     
 function setupStageDisplaySocket()
@@ -965,7 +717,7 @@ function setupStageDisplaySocket()
     webSocketStageDisplay = $.simpleWebSocket({ url: 'ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/stagedisplay' });
     
     webSocketStageDisplay.send({"pwd":config['propresenter_password'],"ptl":610,"acn":"ath"}).done(function() {
-
+        updateLog("Stage Display Connected", "connected")
     }).fail(function(e) {
         // error sending
         updateLog("An Error occurred connecting to ProPresenter.", "error");
@@ -998,8 +750,6 @@ function BridgeRooms_Connect()
             document.getElementById("divSendToBridge").style.display = "block";
             document.getElementById("divGoToLogo").style.display = "block";
             document.getElementById("divKeepAwake").style.display = "block";
-            document.getElementById("divLogContainer").style.visibility = "visible";
-            document.getElementById("divLogContainer").style.opacity = "1";
             document.getElementById("divConnectionStatus").style.visibility = "visible";
             document.getElementById("divConnectionStatus").style.opacity = "1";
             document.getElementById("divAnnouncements").style.visibility = "visible";
@@ -1011,8 +761,6 @@ function BridgeRooms_Connect()
        {
             updateLog("Error connecting to Bridge: Password was incorrect.", "error");
             document.getElementById("spanBridgeConnectionStatusCircle").className = "dot error_dot";
-            document.getElementById("divLogContainer").style.visibility = "visible";
-            document.getElementById("divLogContainer").style.opacity = "1";
        }
     });
     
@@ -1021,8 +769,6 @@ function BridgeRooms_Connect()
        {
             updateLog("Error connecting to Bridge: Bridge already in use.", "error");
             document.getElementById("spanBridgeConnectionStatusCircle").className = "dot error_dot";
-            document.getElementById("divLogContainer").style.visibility = "visible";
-            document.getElementById("divLogContainer").style.opacity = "1";
        }
     });
     
@@ -1228,24 +974,6 @@ String.prototype.replaceAll = function(search, replacement) {
     return target.split(search).join(replacement);
 };
 
-function PresentationItems_ChangeZoom()
-{
-    //loop through all these divProPresenter_PresentationItems
-    // named divSlide-i
-    
-    let rangeValue = document.getElementById("range_PresentationItems_Zoom").value;
-    
-    //loop through all child elements in array and increase the size
-    let divContainer = document.getElementById("divProPresenter_PresentationItems");
-    let innerDivs = divContainer.childNodes;
-    for (let j = 0; j < innerDivs.length; j++)
-    {
-        if (innerDivs[j].id.substring(0, 8) === "divSlide")
-        {
-            innerDivs[j].style.zoom = rangeValue;
-        }
-    }
-}
 </script>
 </head>
 <body onLoad="onLoad();">
