@@ -639,6 +639,7 @@ function GetCleanBridgeArray() // builds an array of current Bridges but only wi
             bridgeObj.id = Bridges[i].id;
             bridgeObj.name = Bridges[i].name;
             bridgeObj.logo = Bridges[i].logo;
+            bridgeObj.favicon = Bridges[i].favicon;
             if (Bridges[i].controlPassword !== "")
             {
                 bridgeObj.requiresPassword = true;
@@ -667,6 +668,7 @@ function GetTextBridges() // builds an array of bridges that are allowed to have
             bridgeObj.name = Bridges[i].name;
             bridgeObj.logo = Bridges[i].logo;
             bridgeObj.logoMode = Bridges[i].logoMode;
+            bridgeObj.favicon = Bridges[i].favicon;
             bridgeObj.foregroundColor = Bridges[i].foregroundColor;
             bridgeObj.backgroundColor = Bridges[i].backgroundColor;
             bridgeObj.font = Bridges[i].font;
@@ -697,6 +699,7 @@ function GetImageBridges() // builds an array of bridges that are allowed to hav
             bridgeObj.id = Bridges[i].id;
             bridgeObj.name = Bridges[i].name;
             bridgeObj.logo = Bridges[i].logo;
+            bridgeObj.favicon = Bridges[i].favicon;
             bridgeObj.logoMode = Bridges[i].logoMode;
             if (Bridges[i].observePassword !== "")
             {
@@ -725,6 +728,7 @@ function GetStageDisplayBridges() // builds an array of bridges that are allowed
             bridgeObj.id = Bridges[i].id;
             bridgeObj.name = Bridges[i].name;
             bridgeObj.logo = Bridges[i].logo;
+            bridgeObj.favicon = Bridges[i].favicon;
             if (Bridges[i].observePassword !== "")
             {
                 bridgeObj.requiresPassword = true;
