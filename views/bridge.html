@@ -624,17 +624,6 @@ function requestPlaylists()
     });        
 }
 
-function requestPresentationInfo(presentationName) // get the information about this presentation
-{
-    // get playlist information
-    let slideQuality = document.getElementById("rangeProPresenterSlideQuality").value;
-    webSocketRemote.send({"action": "presentationRequest","presentationName": presentationName,"presentationPath": config['propresenter_librarypath'] + presentationName + ".pro6","presentationSlideQuality": slideQuality}).done(function() {
-    }).fail(function(e) {
-        updateLog("Could not get ProPresenter presentation info. See console log.", "error");
-        console.log("Could not get ProPresenter presentation info", e);
-    });
-}
-
 function ProPresenter_ClearAll()
 {
     ProPresenter_Clear("all");
@@ -691,8 +680,6 @@ function ProPresenterAPI_AddPlaylistsToArray(playlistsObj)
                 Presentations.push(presentationObj);
                 playlist_items_toprocess++; // add up the number of playlist items to process, since they come in asychronously, and we don't want to do any actions until all data is received
                 updateLog((j+1) + ": " + presentationObj.name, "normal");
-
-                requestPresentationInfo(presentationObj.name);
             }
         }
     }
