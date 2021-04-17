@@ -33,7 +33,7 @@
         .break
         {
             display: block;
-            margin-bottom: 0.1em;
+            margin-bottom: 0.15em;
         }
 
         #current_slide
@@ -239,7 +239,7 @@
                         text = text.replaceAll("\r\n","<span class=\"break\"></span>");
 
                         // Handle verse numbers
-                        text = text.replace(/([0-9]+)([A-za-z]+)/, function(all, ref, text) {
+                        text = text.replaceAll(/([0-9]+)([A-za-z]+)/, function(all, ref, text) {
                             return '<span class="verse-ref">'+ref+'</span> ' + text;
                         });
                         if (currentSlide.innerHTML === "")
