@@ -524,6 +524,12 @@ function ConnectToProPresenter()
             case "playlistRequestAll":
                 ProPresenterAPI_AddPlaylistsToArray(message);
                 break;
+            case "presentationCurrent":
+                ProPresenterAPI_AddPresentationToArray(message);
+                break;
+            case "presentationTriggerIndex":
+                findPresentation(message);
+                break;
             case "clearAll":
                 document.getElementById("divProPresenter_CurrentSlide_Image").innerHTML = "";
                 updateImageListeners("current_slide_image", "clear");
