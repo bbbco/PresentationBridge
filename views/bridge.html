@@ -506,7 +506,6 @@ function ConnectToProPresenter()
     config['propresenter_ip'] = document.getElementById("txtProPresenterIP").value; // add error checking
     config['propresenter_port'] = document.getElementById("txtProPresenterPort").value; // add range checking
     config['propresenter_password'] = document.getElementById("txtProPresenterPassword").value;
-    config['propresenter_librarypath'] = document.getElementById("txtProPresenterLibraryPath").value;
     
     setupStageDisplaySocket();
     setupRemoteSocket();
@@ -524,12 +523,6 @@ function ConnectToProPresenter()
                 break;
             case "playlistRequestAll":
                 ProPresenterAPI_AddPlaylistsToArray(message);
-                break;
-            case "presentationCurrent":
-                ProPresenterAPI_AddPresentationToArray(message);
-                break;
-            case "presentationTriggerIndex":
-                findPresentation(message);
                 break;
             case "clearAll":
                 document.getElementById("divProPresenter_CurrentSlide_Image").innerHTML = "";
