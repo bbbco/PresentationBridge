@@ -33,7 +33,7 @@
         .break
         {
             display: block;
-            margin-bottom: 0.3em;
+            margin-bottom: 0.1em;
         }
 
         #current_slide
@@ -42,7 +42,7 @@
             text-align:center;
             transition: color .5s ease 0s, opacity 0.5s linear;
             text-transform: uppercase;
-            font-weight: bold;
+            font-weight: 200;
             line-height: 115%;
         }
 
@@ -105,16 +105,15 @@
             font-size: 18px;
             text-align: center;
             color: #ffffff;
-
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
             margin: auto;
 
             max-width:100%;
             max-height:100%;
+        }
+
+        span.verse-ref {
+            vertical-align: super;
+            font-size: 0.9rem;
         }
         
         @keyframes waiting-blink
@@ -196,8 +195,7 @@
                     }
                     else
                     {
-                        text = text.replaceAll("\n","<span class=\"break\"></span>")
-                            .replaceAll("\r","<span class=\"break\"></span>");
+                        text = text.replaceAll("\r\n","<span class=\"break\"></span>");
                         if (announcement.innerHTML === "")
                         {
                             announcement.style.opacity = "0";
@@ -237,8 +235,14 @@
                     }
                     else
                     {
-                        text = text.replaceAll("\n","<span class=\"break\"></span>")
-                            .replaceAll("\r","<span class=\"break\"></span>");
+
+                        // Handle line breaks
+                        text = text.replaceAll("\r\n","<span class=\"break\"></span>");
+
+                        // Handle verse numbers
+                        text = text.replace(/([0-9]+)([A-za-z]+)/, function(all, ref, text) {
+                            return '<span class="verse-ref">'+ref+'</span> ' + text;
+                        });
                         if (currentSlide.innerHTML === "")
                         {
                             currentSlide.style.opacity = "0";
