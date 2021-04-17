@@ -542,6 +542,7 @@ function ConnectToProPresenter()
         
     // Stage Display incoming messages
     webSocketStageDisplay.listen(function(message) {
+        console.log("WS Stage:", message);
         switch(message.acn)
         {
             case "ath":
