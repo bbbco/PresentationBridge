@@ -14,7 +14,10 @@
     position: relative; 
     width: 150px;
     margin: 1em;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    -webkit-user-select:none; 
+    -moz-user-select:none; 
+    -ms-user-select: none;
+    user-select: none;
 }
 .onoffswitch-checkbox {
     display: none;
@@ -86,9 +89,10 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    right: : 106px;
+    right: 106px;
     background: #A1A1A1;
-    border: 2px solid #E3E3E3; border-radius: 36px;
+    border: 2px solid #E3E3E3; 
+    border-radius: 36px;
     transition: all 0.3s ease-in 0s; 
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
@@ -579,6 +583,13 @@ function ConnectToProPresenter()
                     let nextSlide = message.ary[1].txt;
                     let nextSlide_notes = message.ary[3].txt;
                     console.log(currentSlide, currentSlide_notes, nextSlide, nextSlide_notes);
+
+                    // Allows you to override what is shown in PB via the slide notes. 
+                    // This is helpful for slides that intersperse images with words and 
+                    // ProPresenter text. 
+                    if (currentSlide_notes.startsWith('Slide Override:') {
+                        currentSlide = currentSlide_notes.substring(14);
+                    }
 
                     updateTextListeners("current_slide", currentSlide);
                     updateTextListeners("current_slide_notes", currentSlide_notes);

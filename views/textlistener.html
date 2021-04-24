@@ -204,7 +204,7 @@
                     }
                     else
                     {
-                        text = text.replaceAll("\r\n","<span class=\"break\"></span>");
+                        text = text.replaceAll("\n","<span class=\"break\"></span>");
                         if (announcement.innerHTML === "")
                         {
                             announcement.style.opacity = "0";
@@ -246,7 +246,7 @@
                     {
 
                         // Handle line breaks
-                        text = text.replaceAll("\r\n","<span class=\"break\"></span>");
+                        text = text.replaceAll("\n","<span class=\"break\"></span>");
 
                         // Handle verse numbers
                         text = text.replace(/([0-9]+)([A-za-z]+)/g, function(all, ref, text) {
