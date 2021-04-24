@@ -588,7 +588,7 @@ function ConnectToProPresenter()
                     // This is helpful for slides that intersperse images with words and 
                     // ProPresenter text. 
                     if (currentSlide_notes.startsWith('Slide Override:')) {
-                        currentSlide = currentSlide_notes.substring(14);
+                        currentSlide = currentSlide_notes.substring(15);
                     }
 
                     updateTextListeners("current_slide", currentSlide);
