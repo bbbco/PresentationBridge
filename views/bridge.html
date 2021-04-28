@@ -484,7 +484,8 @@ function onLoad()
 }
 
 function updateLog(text, cssClass = "normal")
-{ 
+{
+    socket.emit('bridgeUpdateLog')
     let divLog = document.getElementById("divLog");
     let divLogWrapper = document.createElement("div");
 
@@ -524,15 +525,6 @@ function ConnectToProPresenter()
                 {
                     requestPlaylists();
                 }
-                break;
-            case "playlistRequestAll":
-                ProPresenterAPI_AddPlaylistsToArray(message);
-                break;
-            case "presentationCurrent":
-                ProPresenterAPI_AddPresentationToArray(message);
-                break;
-            case "presentationTriggerIndex":
-                findPresentation(message);
                 break;
             case "clearAll":
                 document.getElementById("divProPresenter_CurrentSlide_Image").innerHTML = "";
@@ -668,39 +660,6 @@ function ProPresenter_Clear(layer)
         });
     }
 }
-
-function ProPresenterAPI_AddPlaylistsToArray(playlistsObj)
-{
-    for (let i = 0; i < playlistsObj.playlistAll.length; i++)
-    {
-        let playlistObj = {};
-        playlistObj.name = playlistsObj.playlistAll[i].playlistName;
-        playlistObj.location = playlistsObj.playlistAll[i].playlistLocation; // storing this for now but not really sure what to do with it
-        playlistObj.items = playlistsObj.playlistAll[i].playlist;
-        Playlists.push(playlistObj);
-        updateLog(playlistObj.name + " " + "(" + playlistsObj.playlistAll[i].playlist.length + " items)", "normal-bold");
-        for (let j = 0; j < playlistsObj.playlistAll[i].playlist.length; j++)
-        {
-            let presentationObj = {};
-            if (playlistsObj.playlistAll[i].playlist[j].playlistItemType === "playlistItemTypePresentation") // don't add headers and such to the array, we don't need those
-            {
-                presentationObj.playListIndex = j; // the index in the original playlist playlistall object
-                presentationObj.playListNumber = i; //the index in the original playlist object
-                presentationObj.location = playlistsObj.playlistAll[i].playlist[j].playlistItemLocation; // the sort order
-                presentationObj.name = playlistsObj.playlistAll[i].playlist[j].playlistItemName; // the name of the playlist item
-                Presentations.push(presentationObj);
-                playlist_items_toprocess++; // add up the number of playlist items to process, since they come in asychronously, and we don't want to do any actions until all data is received
-                updateLog((j+1) + ": " + presentationObj.name, "normal");
-            }
-        }
-    }
-    playlist_items_total = playlist_items_toprocess;
-}
-
-function ProPresenterAPI_AddPresentationToArray(presentationObj)
-{
-    console.log("ProPresenterAPI_AddPresentationToArray:", presentationObj);
-}
     
 function setupStageDisplaySocket()
 {  
@@ -778,7 +737,7 @@ function BridgeRooms_Connect()
     });
 
     socket.on('bridgerooms_disconnected', function(bridgeId) {
-        updateLog("Bridge disconnected suddenly", "error");
+        updateLog("Bridge " + bridgeId + " disconnected suddenly", "error");
         BridgeRooms_Disconnect();
     });
 }
