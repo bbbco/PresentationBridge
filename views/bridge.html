@@ -598,13 +598,19 @@ function ConnectToProPresenter()
 
 function setupRemoteSocket()
 {
-    webSocketRemote = $.simpleWebSocket({ url: 'ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/remote' });
-    
-    webSocketRemote.send({"action":"authenticate","protocol":"600","password":config['propresenter_password']}).done(function() {
-    }).fail(function(e) {
+    webSocketRemote = new WebSocket('ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/remote');
+    webSocketRemote.onopen = function() {
+        webSocketRemote.send({"action":"authenticate","protocol":"600","password":config['propresenter_password']}).done(function() {
+            updateLog("ProPresenter Remote Connected", "connected")
+        }).fail(function(e) {
+            updateLog("Could not setup remote socket. See console log.", "error");
+            console.log("Could not setup remote socket:", e);
+        });    
+    }
+    webSocketRemote.error = function() {
         updateLog("Could not setup remote socket. See console log.", "error");
         console.log("Could not setup remote socket:", e);
-    });    
+    }
 }
 
 function requestPlaylists()
@@ -664,15 +670,21 @@ function ProPresenter_Clear(layer)
 function setupStageDisplaySocket()
 {  
     //Connect to ProPresenter Remote Stage Display
-    webSocketStageDisplay = $.simpleWebSocket({ url: 'ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/stagedisplay' });
-    
-    webSocketStageDisplay.send({"pwd":config['propresenter_password'],"ptl":610,"acn":"ath"}).done(function() {
-        updateLog("Stage Display Connected", "connected")
-    }).fail(function(e) {
+    webSocketStageDisplay = new WebSocket('ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/stagedisplay');
+    webSocketStageDisplay.onopen = function() {
+        webSocketStageDisplay.send({"pwd":config['propresenter_password'],"ptl":610,"acn":"ath"}).done(function() {
+            updateLog("Stage Display Connected", "connected")
+        }).fail(function(e) {
+            // error sending
+            updateLog("An Error occurred connecting to ProPresenter:" + e, "error");
+            document.getElementById("spanProPresenterConnectionStatusCircle").className = "error_dot";
+        });
+    }
+    webSocketStageDisplay.error = function(e) {
         // error sending
-        updateLog("An Error occurred connecting to ProPresenter.", "error");
+        updateLog("An Error occurred connecting to ProPresenter." + e, "error");
         document.getElementById("spanProPresenterConnectionStatusCircle").className = "error_dot";
-    });
+    };
 }
 
 function BridgeRooms_Connect()
