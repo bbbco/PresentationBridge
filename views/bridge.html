@@ -607,7 +607,7 @@ function setupRemoteSocket()
             console.log("Could not setup remote socket:", e);
         });    
     }
-    webSocketRemote.onerror = function() {
+    webSocketRemote.onerror = function(e) {
         updateLog("Could not setup remote socket. See console log.", "error");
         console.log("Could not setup remote socket:", e);
     }
@@ -684,7 +684,7 @@ function setupStageDisplaySocket()
     webSocketStageDisplay.onerror = function(e) {
         // error sending
         updateLog("An Error occurred connecting to ProPresenter." + e, "error");
-        console.log("An Error occurred connecting to ProPresenter." + e);
+        console.log("An Error occurred connecting to ProPresenter.", e);
         document.getElementById("spanProPresenterConnectionStatusCircle").className = "error_dot";
     };
 }
