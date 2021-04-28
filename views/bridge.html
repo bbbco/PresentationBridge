@@ -676,15 +676,15 @@ function setupStageDisplaySocket()
             updateLog("Stage Display Connected", "connected")
         }).fail(function(e) {
             // error sending
-            updateLog("An Error occurred connecting to ProPresenter:" + e, "error");
-            console.log("An Error occurred connecting to ProPresenter." + e);
+            updateLog("An Error occurred connecting to ProPresenter Stage socket:" + e, "error");
+            console.log("An Error occurred connecting to ProPresenter Stage socket.", e);
             document.getElementById("spanProPresenterConnectionStatusCircle").className = "error_dot";
         });
     }
     webSocketStageDisplay.onerror = function(e) {
         // error sending
-        updateLog("An Error occurred connecting to ProPresenter." + e, "error");
-        console.log("An Error occurred connecting to ProPresenter.", e);
+        updateLog("An Error occurred connecting to ProPresenter Stage socket." + e.message, "error");
+        console.log("An Error occurred connecting to ProPresenter Stage socket.", e);
         document.getElementById("spanProPresenterConnectionStatusCircle").className = "error_dot";
     };
 }
