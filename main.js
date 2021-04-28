@@ -473,7 +473,7 @@ function AddClient(socket, bridgeID, type)
 
 function RemoveClient(reason, socket)
 {
-    console.log("Removing a Client: ", reason);
+    console.log("Removing Client " + socket.socketID + " because " + reason);
     //console.log(socket);
     
     let socketID = socket.id;
@@ -503,7 +503,7 @@ function RemoveClient(reason, socket)
     if (index !== null)
     {
         Clients.splice(index, 1);
-        console.log("*** CLIENT DISCONNECTED ***");
+        console.log("*** CLIENT " + socket.socketID + " DISCONNECTED ***");
         io.to("BridgeRoom-" + bridgeID).emit("client_disconnected", reason, socketID);
     }
 }
