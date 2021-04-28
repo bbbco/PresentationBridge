@@ -515,7 +515,7 @@ function ConnectToProPresenter()
     setupStageDisplaySocket();
     setupRemoteSocket();
     
-    webSocketRemote.listen(function(message) {   
+    webSocketRemote.onmessage = function(message) {   
         console.log("WS Remote:", message);                 
         switch(message.action)
         {
@@ -534,10 +534,10 @@ function ConnectToProPresenter()
                 console.log("the action was: " + message.action);
                 break;
         }
-    });
+    };
         
     // Stage Display incoming messages
-    webSocketStageDisplay.listen(function(message) {
+    webSocketStageDisplay.onmessage = function(message) {
         // console.log("WS Stage:", message);
         switch(message.acn)
         {
@@ -593,7 +593,7 @@ function ConnectToProPresenter()
                 console.log(message);
                 break;
         }
-    });
+    };
 }
 
 function setupRemoteSocket()
@@ -677,12 +677,14 @@ function setupStageDisplaySocket()
         }).fail(function(e) {
             // error sending
             updateLog("An Error occurred connecting to ProPresenter:" + e, "error");
+            console.log("An Error occurred connecting to ProPresenter." + e);
             document.getElementById("spanProPresenterConnectionStatusCircle").className = "error_dot";
         });
     }
     webSocketStageDisplay.onerror = function(e) {
         // error sending
         updateLog("An Error occurred connecting to ProPresenter." + e, "error");
+        console.log("An Error occurred connecting to ProPresenter." + e);
         document.getElementById("spanProPresenterConnectionStatusCircle").className = "error_dot";
     };
 }
