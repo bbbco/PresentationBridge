@@ -1,15 +1,4 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * TO DO:
- * needs to accept a app id and secret key
- * 
- */
-
+require('log-timestamp');
 const express = require('express');
 const app = express();
 const http = require('http').Server(app);
@@ -216,7 +205,7 @@ io.sockets.on("connection", function(socket) {
     socket.on("bridgerooms_disconnect", function(bridgeID) {
        SetBridgeInUse(bridgeID, false);
        SetLogoMode(bridgeID, true);
-       RemoveClient(socket);
+       RemoveClient("Received a bridgerooms_disconnect event", socket);
     });
     
     // LISTENER SOCKETS
@@ -442,10 +431,10 @@ io.sockets.on("connection", function(socket) {
         updateBridgeImage(bridgeID, "current_slide_image", imgData);
     });
     
-    socket.on("disconnect", function(){
-        RemoveClient(socket);
+    socket.on("disconnect", function(reason){
+        RemoveClient(reason, socket);
         
-        io.to("Bridge").emit("client_disconnected", Clients);
+        io.to("Bridge").emit("client_disconnected", reason, Clients);
     });
 });
 
@@ -482,9 +471,9 @@ function AddClient(socket, bridgeID, type)
     io.to("BridgeRoom-" + bridgeID).emit("client_connected", clientObj);
 }
 
-function RemoveClient(socket)
+function RemoveClient(reason, socket)
 {
-    console.log("Removing a Client.");
+    console.log("Removing a Client: ", reason);
     //console.log(socket);
     
     let socketID = socket.id;
@@ -515,7 +504,7 @@ function RemoveClient(socket)
     {
         Clients.splice(index, 1);
         console.log("*** CLIENT DISCONNECTED ***");
-        io.to("BridgeRoom-" + bridgeID).emit("client_disconnected", socketID);
+        io.to("BridgeRoom-" + bridgeID).emit("client_disconnected", reason, socketID);
     }
 }
 

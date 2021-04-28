@@ -772,8 +772,8 @@ function BridgeRooms_Connect()
         AddClient(clientObj);
     });
     
-    socket.on('client_disconnected', function(socketID) {
-        console.log("Client disconnected.", socketID);
+    socket.on('client_disconnected', function(reason, socketID) {
+        console.log("Client " + socketID + "disconnected because " + reason);
         RemoveClient(socketID);
     });
 
