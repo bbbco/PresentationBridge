@@ -562,11 +562,7 @@ function requestPlaylists()
     document.getElementById("chkSendToBridge").checked = false;
     updateLog("Requesting All Playlist Information.", "normal");
         
-    webSocketRemote.send({"action":"playlistRequestAll"}).done(function() {
-    }).fail(function(e) {
-        updateLog("Could not get ProPresenter playlist. See console log.", "error");
-        console.log("Could not get ProPresenter playlist", e);
-    });        
+    webSocketRemote.send({"action":"playlistRequestAll"});        
 }
 
 function ProPresenter_ClearAll()
