@@ -514,7 +514,11 @@ function ConnectToProPresenter()
     updateLog("Attempting to connect to ProPresenter...");
     setupRemoteSocket();
     setupStageDisplaySocket();
-     
+}
+
+function setupRemoteSocket()
+{
+    webSocketRemote = new WebSocket('ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/remote');
     webSocketRemote.onmessage = function(event) {
         let message = JSON.parse(event.data);   
         console.log("WS Remote:", message);                 
@@ -536,78 +540,13 @@ function ConnectToProPresenter()
                 break;
         }
     };
-        
-    // Stage Display incoming messages
-    webSocketStageDisplay.onmessage = function(event) {
-        let message = JSON.parse(event.data);
-        console.log("WS Stage:", message);
-        switch(message.data.acn)
-        {
-            case "ath":
-                if (message.data.ath)
-                {
-                    updateLog("Connected to ProPresenter.", "connected");
-                    document.getElementById("spanProPresenterConnectionStatusCircle").className = "dot connected_dot";
-                    document.getElementById("btnConnectToProPresenter").disabled = true;
-                    document.getElementById("txtProPresenterIP").disabled = true;
-                    document.getElementById("txtProPresenterPort").disabled = true;
-                    document.getElementById("txtProPresenterPassword").disabled = true;
-                    document.getElementById("btnRefreshData").style.display = "block";
-                    document.getElementById("btnClearAll").style.display = "block";
-            
-                }
-                else
-                {
-                    updateLog("Error connecting to ProPresenter. Invalid pasword. " + message.err, "error");
-                    document.getElementById("spanProPresenterConnectionStatusCircle").className = "dot error_dot";
-                }
-                break;
-            case "sys":
-                break;
-            case "tmr":
-                //add support for timers/clocks
-                break;
-            case "vid":
-                //add support for video countdowns
-                break;
-            case "fv":
-                if (message.ary[0].acn == "cs") {
-                    let currentSlide = message.ary[0].txt;
-                    let currentSlide_notes = message.ary[2].txt;
-                    let nextSlide = message.ary[1].txt;
-                    let nextSlide_notes = message.ary[3].txt;
-                    console.log(currentSlide, currentSlide_notes, nextSlide, nextSlide_notes);
-
-                    // Allows you to override what is shown in PB via the slide notes. 
-                    // This is helpful for slides that intersperse images with words and 
-                    // ProPresenter text. 
-                    if (currentSlide_notes.startsWith('Slide Override:')) {
-                        currentSlide = currentSlide_notes.substring(15);
-                    }
-
-                    updateTextListeners("current_slide", currentSlide);
-                    updateTextListeners("current_slide_notes", currentSlide_notes);
-                    updateTextListeners("next_slide", nextSlide);
-                    updateTextListeners("next_slide_notes", nextSlide_notes);
-                }
-                break;
-            default:
-                console.log(message);
-                break;
-        }
-    };
-}
-
-function setupRemoteSocket()
-{
-    webSocketRemote = new WebSocket('ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/remote');
     webSocketRemote.onopen = function() {
         webSocketRemote.send({"action":"authenticate","protocol":"600","password": config['propresenter_password']});  
-    }
+    };
     webSocketRemote.onerror = function(e) {
         updateLog("Could not setup remote socket. See console log.", "error");
         console.log("Could not setup remote socket:", e);
-    }
+    };
 }
 
 function requestPlaylists()
@@ -664,9 +603,68 @@ function setupStageDisplaySocket()
 {  
     //Connect to ProPresenter Remote Stage Display
     webSocketStageDisplay = new WebSocket('ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/stagedisplay');
+     // Stage Display incoming messages
+     webSocketStageDisplay.onmessage = function(event) {
+        let message = JSON.parse(event.data);
+        console.log("WS Stage:", message);
+        switch(message.acn)
+        {
+            case "ath":
+                if (message.ath)
+                {
+                    updateLog("Connected to ProPresenter.", "connected");
+                    document.getElementById("spanProPresenterConnectionStatusCircle").className = "dot connected_dot";
+                    document.getElementById("btnConnectToProPresenter").disabled = true;
+                    document.getElementById("txtProPresenterIP").disabled = true;
+                    document.getElementById("txtProPresenterPort").disabled = true;
+                    document.getElementById("txtProPresenterPassword").disabled = true;
+                    document.getElementById("btnRefreshData").style.display = "block";
+                    document.getElementById("btnClearAll").style.display = "block";
+            
+                }
+                else
+                {
+                    updateLog("Error connecting to ProPresenter. Invalid pasword. " + message.err, "error");
+                    document.getElementById("spanProPresenterConnectionStatusCircle").className = "dot error_dot";
+                }
+                break;
+            case "sys":
+                break;
+            case "tmr":
+                //add support for timers/clocks
+                break;
+            case "vid":
+                //add support for video countdowns
+                break;
+            case "fv":
+                if (message.ary[0].acn == "cs") {
+                    let currentSlide = message.ary[0].txt;
+                    let currentSlide_notes = message.ary[2].txt;
+                    let nextSlide = message.ary[1].txt;
+                    let nextSlide_notes = message.ary[3].txt;
+                    console.log(currentSlide, currentSlide_notes, nextSlide, nextSlide_notes);
+
+                    // Allows you to override what is shown in PB via the slide notes. 
+                    // This is helpful for slides that intersperse images with words and 
+                    // ProPresenter text. 
+                    if (currentSlide_notes.startsWith('Slide Override:')) {
+                        currentSlide = currentSlide_notes.substring(15);
+                    }
+
+                    updateTextListeners("current_slide", currentSlide);
+                    updateTextListeners("current_slide_notes", currentSlide_notes);
+                    updateTextListeners("next_slide", nextSlide);
+                    updateTextListeners("next_slide_notes", nextSlide_notes);
+                }
+                break;
+            default:
+                console.log(message);
+                break;
+        }
+    };
     webSocketStageDisplay.onopen = function() {
         webSocketStageDisplay.send({"pwd":config['propresenter_password'],"ptl":610,"acn":"ath"});
-    }
+    };
     webSocketStageDisplay.onerror = function(e) {
         // error sending
         updateLog("An Error occurred connecting to ProPresenter Stage socket." + e.message, "error");
