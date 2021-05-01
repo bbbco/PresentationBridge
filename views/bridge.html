@@ -519,28 +519,29 @@ function ConnectToProPresenter()
 function setupRemoteSocket()
 {
     webSocketRemote = new WebSocket('ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/remote');
-    webSocketRemote.onmessage = function(event) {
-        let message = JSON.parse(event.data);   
-        console.log("WS Remote:", message);                 
-        switch(message.action)
-        {
-            case "authenticate":
-                //do something with the authenticated data
-                if (message.authenticated)
-                {
-                    requestPlaylists();
-                }
-                break;
-            case "clearAll":
-                document.getElementById("divProPresenter_CurrentSlide_Image").innerHTML = "";
-                updateImageListeners("current_slide_image", "clear");
-                break;
-            default:
-                console.log("the action was: " + message.action);
-                break;
-        }
-    };
+
     webSocketRemote.onopen = function() {
+        webSocketRemote.onmessage = function(event) {
+            let message = JSON.parse(event.data);   
+            console.log("WS Remote:", message);                 
+            switch(message.action)
+            {
+                case "authenticate":
+                    //do something with the authenticated data
+                    if (message.authenticated)
+                    {
+                        requestPlaylists();
+                    }
+                    break;
+                case "clearAll":
+                    document.getElementById("divProPresenter_CurrentSlide_Image").innerHTML = "";
+                    updateImageListeners("current_slide_image", "clear");
+                    break;
+                default:
+                    console.log("the action was: " + message.action);
+                    break;
+            }
+        };
         webSocketRemote.send({"action":"authenticate","protocol":"600","password": config['propresenter_password']});  
     };
     webSocketRemote.onerror = function(e) {
