@@ -521,28 +521,28 @@ function setupRemoteSocket()
     webSocketRemote = new WebSocket('ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/remote');
 
     webSocketRemote.onopen = function() {
-        webSocketRemote.onmessage = function(event) {
-            let message = JSON.parse(event.data);   
-            console.log("WS Remote:", message);                 
-            switch(message.action)
-            {
-                case "authenticate":
-                    //do something with the authenticated data
-                    if (message.authenticated)
-                    {
-                        requestPlaylists();
-                    }
-                    break;
-                case "clearAll":
-                    document.getElementById("divProPresenter_CurrentSlide_Image").innerHTML = "";
-                    updateImageListeners("current_slide_image", "clear");
-                    break;
-                default:
-                    console.log("the action was: " + message.action);
-                    break;
-            }
-        };
-        webSocketRemote.send({"action":"authenticate","protocol":"600","password": config['propresenter_password']});  
+        webSocketRemote.send(JSON.stringify({"action":"authenticate","protocol":"610","password": config['propresenter_password']}));  
+    };
+    webSocketRemote.onmessage = function(event) {
+        let message = JSON.parse(event.data);   
+        console.log("WS Remote:", message);                 
+        switch(message.action)
+        {
+            case "authenticate":
+                //do something with the authenticated data
+                if (message.authenticated)
+                {
+                    requestPlaylists();
+                }
+                break;
+            case "clearAll":
+                document.getElementById("divProPresenter_CurrentSlide_Image").innerHTML = "";
+                updateImageListeners("current_slide_image", "clear");
+                break;
+            default:
+                console.log("the action was: " + message.action);
+                break;
+        }
     };
     webSocketRemote.onerror = function(e) {
         updateLog("Could not setup remote socket. See console log.", "error");
@@ -563,7 +563,7 @@ function requestPlaylists()
     document.getElementById("chkSendToBridge").checked = false;
     updateLog("Requesting All Playlist Information.", "normal");
         
-    webSocketRemote.send({"action":"playlistRequestAll"});        
+    webSocketRemote.send(JSON.stringify({"action":"playlistRequestAll"}));        
 }
 
 function ProPresenter_ClearAll()
@@ -592,7 +592,7 @@ function ProPresenter_Clear(layer)
 
     if (actionString !== "")
     {
-        webSocketRemote.send({"action": actionString});
+        webSocketRemote.send(JSON.stringify({"action": actionString}));
     }
 }
     
@@ -660,7 +660,7 @@ function setupStageDisplaySocket()
         }
     };
     webSocketStageDisplay.onopen = function() {
-        webSocketStageDisplay.send({"pwd":config['propresenter_password'],"ptl":610,"acn":"ath"});
+        webSocketStageDisplay.send(JSON.stringify({"pwd":config['propresenter_password'],"ptl":610,"acn":"ath"}));
     };
     webSocketStageDisplay.onerror = function(e) {
         // error sending
