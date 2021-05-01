@@ -511,10 +511,10 @@ function ConnectToProPresenter()
     config['propresenter_ip'] = document.getElementById("txtProPresenterIP").value; // add error checking
     config['propresenter_port'] = document.getElementById("txtProPresenterPort").value; // add range checking
     config['propresenter_password'] = document.getElementById("txtProPresenterPassword").value;
-    
-    setupStageDisplaySocket();
+    updateLog("Attempting to connect to ProPresenter...");
     setupRemoteSocket();
-    
+    setupStageDisplaySocket();
+     
     webSocketRemote.onmessage = function(message) {   
         console.log("WS Remote:", message);                 
         switch(message.action)
