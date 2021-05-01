@@ -602,7 +602,8 @@ function setupRemoteSocket()
 {
     webSocketRemote = new WebSocket('ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/remote');
     webSocketRemote.onopen = function() {
-        webSocketRemote.send({"action":"authenticate","protocol":"600","password": config['propresenter_password']});  
+        let authenticate_call = webSocketRemote.send({"action":"authenticate","protocol":"600","password": config['propresenter_password']});  
+        console.log(authenticate_call);
     }
     webSocketRemote.onerror = function(e) {
         updateLog("Could not setup remote socket. See console log.", "error");
