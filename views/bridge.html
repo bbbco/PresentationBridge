@@ -515,7 +515,8 @@ function ConnectToProPresenter()
     setupRemoteSocket();
     setupStageDisplaySocket();
      
-    webSocketRemote.onmessage = function(message) {   
+    webSocketRemote.onmessage = function(event) {
+        var message = JSON.parse(event.data);   
         console.log("WS Remote:", message);                 
         switch(message.action)
         {
@@ -537,12 +538,13 @@ function ConnectToProPresenter()
     };
         
     // Stage Display incoming messages
-    webSocketStageDisplay.onmessage = function(message) {
+    webSocketStageDisplay.onmessage = function(event) {
+        var message = JSON.parse(event.data);
         // console.log("WS Stage:", message);
-        switch(message.acn)
+        switch(message.data.acn)
         {
             case "ath":
-                if (message.ath)
+                if (message.data.ath)
                 {
                     updateLog("Connected to ProPresenter.", "connected");
                     document.getElementById("spanProPresenterConnectionStatusCircle").className = "dot connected_dot";
@@ -654,11 +656,7 @@ function ProPresenter_Clear(layer)
 
     if (actionString !== "")
     {
-        webSocketRemote.send({"action": actionString}).done(function() {
-            console.log("COMMAND SENT: " + actionString);
-        }).fail(function(e) {
-            console.error(e);
-        });
+        webSocketRemote.send({"action": actionString});
     }
 }
     
