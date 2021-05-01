@@ -516,7 +516,7 @@ function ConnectToProPresenter()
     setupStageDisplaySocket();
      
     webSocketRemote.onmessage = function(event) {
-        var message = JSON.parse(event.data);   
+        let message = JSON.parse(event.data);   
         console.log("WS Remote:", message);                 
         switch(message.action)
         {
@@ -539,8 +539,8 @@ function ConnectToProPresenter()
         
     // Stage Display incoming messages
     webSocketStageDisplay.onmessage = function(event) {
-        var message = JSON.parse(event.data);
-        // console.log("WS Stage:", message);
+        let message = JSON.parse(event.data);
+        console.log("WS Stage:", message);
         switch(message.data.acn)
         {
             case "ath":
@@ -602,8 +602,7 @@ function setupRemoteSocket()
 {
     webSocketRemote = new WebSocket('ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/remote');
     webSocketRemote.onopen = function() {
-        let authenticate_call = webSocketRemote.send({"action":"authenticate","protocol":"600","password": config['propresenter_password']});  
-        console.log(authenticate_call);
+        webSocketRemote.send({"action":"authenticate","protocol":"600","password": config['propresenter_password']});  
     }
     webSocketRemote.onerror = function(e) {
         updateLog("Could not setup remote socket. See console log.", "error");
