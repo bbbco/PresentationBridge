@@ -600,12 +600,7 @@ function setupRemoteSocket()
 {
     webSocketRemote = new WebSocket('ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/remote');
     webSocketRemote.onopen = function() {
-        webSocketRemote.send({"action":"authenticate","protocol":"600","password":config['propresenter_password']}).done(function() {
-            updateLog("ProPresenter Remote Connected", "connected")
-        }).fail(function(e) {
-            updateLog("Could not setup remote socket. See console log.", "error");
-            console.log("Could not setup remote socket:", e);
-        });    
+        webSocketRemote.send({"action":"authenticate","protocol":"600","password": config['propresenter_password']});  
     }
     webSocketRemote.onerror = function(e) {
         updateLog("Could not setup remote socket. See console log.", "error");
@@ -672,14 +667,7 @@ function setupStageDisplaySocket()
     //Connect to ProPresenter Remote Stage Display
     webSocketStageDisplay = new WebSocket('ws://'+config['propresenter_ip']+':'+config['propresenter_port']+'/stagedisplay');
     webSocketStageDisplay.onopen = function() {
-        webSocketStageDisplay.send({"pwd":config['propresenter_password'],"ptl":610,"acn":"ath"}).done(function() {
-            updateLog("Stage Display Connected", "connected")
-        }).fail(function(e) {
-            // error sending
-            updateLog("An Error occurred connecting to ProPresenter Stage socket:" + e, "error");
-            console.log("An Error occurred connecting to ProPresenter Stage socket.", e);
-            document.getElementById("spanProPresenterConnectionStatusCircle").className = "error_dot";
-        });
+        webSocketStageDisplay.send({"pwd":config['propresenter_password'],"ptl":610,"acn":"ath"});
     }
     webSocketStageDisplay.onerror = function(e) {
         // error sending
