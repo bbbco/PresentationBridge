@@ -603,7 +603,7 @@ function setupStageDisplaySocket()
      // Stage Display incoming messages
      webSocketStageDisplay.onmessage = function(event) {
         let message = JSON.parse(event.data);
-        console.log("WS Stage:", message);
+        // console.log("WS Stage:", message);
         switch(message.acn)
         {
             case "ath":
